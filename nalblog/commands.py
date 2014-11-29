@@ -22,13 +22,14 @@ def cli():
 @click.option('--rootpath', default='/', help='Root path of the site')
 def build(rootpath):
     from .build import write_site
-    click.echo('Writing out site')
+    logger.info('Writing out site...')
     write_site({'rootpath': rootpath})
-    click.echo('Writing out site done')
+    logger.info('...done')
 
 
 @cli.command()
-def watch():
+@click.option('--rootpath', default='/', help='Root path of the site')
+def watch(rootpath):
     import time
     import sys
     from pelican.utils import folder_watcher
@@ -45,13 +46,9 @@ def watch():
     server_thread.daemon = True
     server_thread.start()
 
+    logger.info('AutoReload setup')
+
     try:
-        logger.info('AutoReload setup')
-
-        def _ignore_cache(pelican_obj):
-            if pelican_obj.settings['AUTORELOAD_IGNORE_CACHE']:
-                pelican_obj.settings['LOAD_CONTENT_CACHE'] = False
-
         while True:
             try:
                 # Check source dir for changed files ending with the given
@@ -62,20 +59,19 @@ def watch():
                 modified = {k: next(v) for k, v in watchers.items()}
 
                 if any(modified.values()):
-                    print('\n-> Modified: {}. re-generating...'.format(
+                    print('\nModified: {}. re-generating...'.format(
                         ', '.join(k for k, v in modified.items() if v)))
 
-                    write_site()
+                    write_site({'rootpath': rootpath})
             except KeyboardInterrupt:
                 logger.warning("Keyboard interrupt, quitting.")
                 break
 
             except Exception:
-                logger.exception('yo')
-
+                logger.exception('Failed to rgenerate website. Eating, will try again.')
             finally:
                 time.sleep(.5)  # sleep to avoid cpu load
 
     except Exception as e:
-        logger.exception('yo')
+        logger.exception('Failed to rgenerate website. Exiting.')
         sys.exit(getattr(e, 'exitcode', 1))

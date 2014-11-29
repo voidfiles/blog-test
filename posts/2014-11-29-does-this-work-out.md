@@ -2,6 +2,7 @@
 template: post
 published: false
 title: Does this work out
+published: true
 tags: 
   - awesome
   - coolio

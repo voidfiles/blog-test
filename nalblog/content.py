@@ -1,10 +1,32 @@
 import os
 
+import frontmatter
 from pelican.utils import slugify
-import markdown2
+from markdown2 import Markdown
 
 from .exceptions import NalContentException
 from .utils import get_date
+
+
+class NalMarkdown(Markdown):
+    def _extract_metadata(self, text):
+        # fast test
+        if not text.startswith("---"):
+            return text
+
+        content = frontmatter.loads(text)
+        self.metadata = content.metadata
+        return content.content
+
+
+def markdown(text, html4tags=False, tab_width=4,
+             safe_mode=None, extras=None, link_patterns=None,
+             use_file_vars=False):
+
+    return NalMarkdown(html4tags=html4tags, tab_width=tab_width,
+                       safe_mode=safe_mode, extras=extras,
+                       link_patterns=link_patterns,
+                       use_file_vars=use_file_vars).convert(text)
 
 
 class Content(dict):
@@ -19,7 +41,7 @@ class Content(dict):
         if not text:
             raise NalContentException('file: %s has no content' % (path))
 
-        html = markdown2.markdown(text, extras=["metadata"])
+        html = markdown(text, extras=["metadata"])
         metadata = html.metadata
 
         date = metadata.get('date')

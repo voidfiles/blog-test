@@ -12,6 +12,10 @@ prose:
         field:
           element: "text"
           label: "title"
+      - name: "published"
+        field:
+          element: "hidden"
+          value: false
       - name: "template"
         field:
           element: "hidden"

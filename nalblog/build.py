@@ -5,6 +5,7 @@ import os
 
 from jinja2 import Environment, FileSystemLoader
 from pelican.utils import mkdir_p, clean_output_dir, copy
+from werkzeug.contrib.atom import AtomFeed
 
 from .content import Content
 
@@ -29,9 +30,18 @@ def walk_posts():
         for name in files:
             yield root, name
 
+required_fields = ['title', 'date']
+
 
 def get_posts():
-    return (Content.from_markdown_file(directory, file_name) for directory, file_name in walk_posts())
+    for directory, file_name in walk_posts():
+        post = Content.from_markdown_file(directory, file_name)
+
+        if not set(required_fields) <= set(post.keys()):
+            logger.warning('Droping %s because it is missing one of these required keys %s', file_name, required_fields)
+            continue
+
+        yield post
 
 
 def render_post(ctx, post):
@@ -66,7 +76,29 @@ def render_index(ctx, posts):
 def write_index(output_post_dir, ctx, posts):
     output_path = os.path.join(output_post_dir, 'index.html')
     output = render_index(ctx, posts)
-    logger.info("Writing post to path %s", output_path)
+    logger.info("Writing index to path %s", output_path)
+    with open(output_path, 'w') as fd:
+        fd.write(output)
+
+
+def render_feed(ctx, posts):
+    base_url = ctx.get('rootpath') + 'feed.xml'
+    feed = AtomFeed("My Blog", feed_url=base_url,
+                    url=ctx.get('rootpath'),
+                    subtitle="My example blog for a feed test.")
+
+    for post in posts[0:10]:
+        feed.add(post.get('title'), post.html, content_type='html',
+                 author=post.get('author', 'None'), url=base_url + post.url_path, id=base_url + post.url_path,
+                 updated=post.get('date'), published=post.get('date'))
+
+    return feed.to_string()
+
+
+def write_feed(output_post_dir, ctx, posts):
+    output_path = os.path.join(output_post_dir, 'index.xml')
+    output = render_feed(ctx, posts)
+    logger.info("Writing feed to path %s", output_path)
     with open(output_path, 'w') as fd:
         fd.write(output)
 
@@ -78,6 +110,8 @@ def write_site(ctx):
     copy(SITE_ROOT_DIR, SITE_DIR)
     mkdir_p(output_post_dir)
     write_post_to_dir = functools.partial(write_post, output_post_dir, ctx)
-    posts = list(itertools.imap(write_post_to_dir, get_posts()))
-    posts = sorted(posts, key=lambda x: x.get('published'), reverse=True)
+    posts = itertools.imap(write_post_to_dir, get_posts())
+    posts = itertools.ifilter(lambda x: x.get('published'), posts)
+    posts = sorted(list(posts), key=lambda x: x.get('published'), reverse=True)
     write_index(SITE_DIR, ctx, posts)
+    write_feed(SITE_DIR, ctx, posts)
