@@ -12,3 +12,21 @@ build:
     - script:
         name: generate site
         code: python cli_nalblog build
+deploy :
+  steps :
+    - script:
+        name: Configure git
+        code: |-
+          git config --global user.email "voidfiles@gmail.com"
+          git config --global user.name "voidfiles"
+
+          # remove current .git folder
+          rm -rf .git
+    - script:
+        name: Deploy to github pages
+        code: |-
+          cd site
+          git init
+          git add .
+          git commit -m "deploy commit from $WERCKER_STARTED_BY"
+          git push -f $GIT_REMOTE master:gh-pages
