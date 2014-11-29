@@ -20,6 +20,11 @@ prose:
         field:
           element: "hidden"
           value: "post"
+      - name: "author"
+        field:
+          element: "text"
+          label: "Author"
+          value: "Contributor"
       - name: "date"
         field:
           element: "text"
