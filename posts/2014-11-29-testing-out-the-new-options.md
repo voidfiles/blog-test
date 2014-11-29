@@ -1,6 +1,6 @@
 ---
 template: post
-published: false
+published: true
 title: Testing out the new options.
 author: Contributor
 date: "2015-11-29 01:56:00"
