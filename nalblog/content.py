@@ -43,7 +43,7 @@ class Content(dict):
 
     @property
     def url_path(self):
-        return '/posts/%s' % (self.slug)
+        return 'posts/%s' % (self.slug)
 
     @property
     def template(self):

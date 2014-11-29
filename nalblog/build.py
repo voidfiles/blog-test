@@ -34,18 +34,20 @@ def get_posts():
     return (Content.from_markdown_file(directory, file_name) for directory, file_name in walk_posts())
 
 
-def render_post(post):
+def render_post(ctx, post):
     template_name = post.template
     template = env.get_template(template_name)
+    ctx['post'] = post
+    ctx['site'] = SITE_DATA
 
-    return template.render(post=post, site=SITE_DATA)
+    return template.render(**ctx)
 
 
-def write_post(output_post_dir, post):
+def write_post(output_post_dir, ctx, post):
     post_dir = os.path.join(output_post_dir, post.slug)
     mkdir_p(post_dir)
     output_path = os.path.join(post_dir, 'index.html')
-    output = render_post(post)
+    output = render_post(ctx, post)
     logger.info("Writing post to path %s", output_path)
     with open(output_path, 'w') as fd:
         fd.write(output)
@@ -53,27 +55,29 @@ def write_post(output_post_dir, post):
     return post
 
 
-def render_index(posts):
+def render_index(ctx, posts):
     template = env.get_template('index.html')
+    ctx['posts'] = posts
+    ctx['site'] = SITE_DATA
+    ctx['is_index'] = True
+    return template.render(**ctx)
 
-    return template.render(posts=posts, site=SITE_DATA, is_index=True)
 
-
-def write_index(output_post_dir, post):
+def write_index(output_post_dir, ctx, posts):
     output_path = os.path.join(output_post_dir, 'index.html')
-    output = render_index(post)
+    output = render_index(ctx, posts)
     logger.info("Writing post to path %s", output_path)
     with open(output_path, 'w') as fd:
         fd.write(output)
 
 
-def write_site():
+def write_site(ctx):
     output_post_dir = os.path.join(SITE_DIR, 'posts')
 
     clean_output_dir(SITE_DIR, [])
     copy(SITE_ROOT_DIR, SITE_DIR)
     mkdir_p(output_post_dir)
-    write_post_to_dir = functools.partial(write_post, output_post_dir)
+    write_post_to_dir = functools.partial(write_post, output_post_dir, ctx)
     posts = list(itertools.imap(write_post_to_dir, get_posts()))
     posts = sorted(posts, key=lambda x: x.get('published'), reverse=True)
-    write_index(SITE_DIR, posts)
+    write_index(SITE_DIR, ctx, posts)

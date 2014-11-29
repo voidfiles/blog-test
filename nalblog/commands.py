@@ -19,10 +19,11 @@ def cli():
 
 
 @cli.command()
-def build():
+@click.option('--rootpath', default='/', help='Root path of the site')
+def build(rootpath):
     from .build import write_site
     click.echo('Writing out site')
-    write_site()
+    write_site({'rootpath': rootpath})
     click.echo('Writing out site done')
 
 
