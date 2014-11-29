@@ -22,9 +22,9 @@ class Content(dict):
         html = markdown2.markdown(text, extras=["metadata"])
         metadata = html.metadata
 
-        published = metadata.get('published')
-        if published:
-            metadata['published'] = get_date(published)
+        date = metadata.get('date')
+        if date:
+            metadata['date'] = get_date(date)
 
         content = cls(**metadata)
 
