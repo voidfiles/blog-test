@@ -1,0 +1,24 @@
+prose:
+  rooturl: 'posts'
+  media: 'root/media'
+  ignore:
+    - index.md
+    - _prose.yml
+    - /_layouts
+    - /_includes
+  metadata:
+    posts:
+      - name: "title"
+        field:
+          element: "text"
+          label: "title"
+      - name: "template"
+        field:
+          element: "hidden"
+          value: "post"
+      - name: "tags"
+        field:
+          element: "multiselect"
+          label: "Add Tags"
+          placeholder: "Choose Tags"
+          alterable: true

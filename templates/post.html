@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<header class="intro-header" style="background-image: url('http://36.media.tumblr.com/0d6b9a8370b2ea36b7d71210050a8a54/tumblr_ndeqnctugu1sfie3io1_1280.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="site-heading">
+                    <h1>{{ post.title }}</h1>
+                    <hr class="small">
+                    <span class="subheading">awesome awesome awesome</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+{% endblock %}
+
+{% block main %}
+   <!-- Post Content -->
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                	{{ post.html }}
+                </div>
+            </div>
+        </div>
+    </article>
+{% endblock %}
