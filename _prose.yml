@@ -1,6 +1,5 @@
 prose:
   rooturl: 'posts'
-  media: 'root/media'
   ignore:
     - index.md
     - _prose.yml
