@@ -14,7 +14,8 @@ prose:
           label: "title"
       - name: "published"
         field:
-          element: "hidden"
+          element: "checkbox"
+          label: "Is this blog post published?"
           value: false
       - name: "template"
         field:
