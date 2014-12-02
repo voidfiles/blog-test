@@ -17,4 +17,3 @@ They're currently number 2 in the East, and only 1.5 games behind Toronto. Thank
 Seriously, how can you not love these guys?
 
 <iframe width="560" height="315" src="//www.youtube.com/embed/Yh73xfvDgKA?rel=0" frameborder="0" allowfullscreen></iframe>
-
