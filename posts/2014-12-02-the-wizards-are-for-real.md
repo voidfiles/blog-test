@@ -18,4 +18,3 @@ Seriously, how can you not love these guys?
 
 <iframe width="560" height="315" src="//www.youtube.com/embed/Yh73xfvDgKA?rel=0" frameborder="0" allowfullscreen></iframe>
 
-I
