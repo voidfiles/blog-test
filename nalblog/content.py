@@ -1,4 +1,6 @@
 import os
+import six
+from IPython import embed
 
 import frontmatter
 from pelican.utils import slugify
@@ -33,9 +35,13 @@ class Content(dict):
 
     @classmethod
     def from_markdown_file(cls, directory, file_name):
+        if not file_name.endswith('.md'):
+            return None
+
         path = os.path.join(directory, file_name)
         text = None
-        with open(path) as fd:
+        text = ''
+        with open(path, 'r') as fd:
             text = fd.read()
 
         if not text:
