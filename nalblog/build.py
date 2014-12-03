@@ -114,6 +114,6 @@ def write_site(ctx):
     write_post_to_dir = functools.partial(write_post, output_post_dir, ctx)
     posts = itertools.imap(write_post_to_dir, get_posts())
     posts = itertools.ifilter(lambda x: x.get('published'), posts)
-    posts = sorted(list(posts), key=lambda x: x.get('published'), reverse=True)
+    posts = sorted(list(posts), key=lambda x: x.get('date'), reverse=True)
     write_index(SITE_DIR, ctx, posts)
     write_feed(SITE_DIR, ctx, posts)
