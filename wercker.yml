@@ -2,7 +2,6 @@
 box: wercker/python
 build:
   steps:
-    - apt-get install libreadline6-dev
     # Run a smart version of bundle install
     # which improves build execution time of
     # future builds
