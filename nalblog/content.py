@@ -1,6 +1,4 @@
 import os
-import six
-from IPython import embed
 
 import frontmatter
 from pelican.utils import slugify
