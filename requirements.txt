@@ -9,12 +9,10 @@ click==3.3
 dateparser==0.1.0
 docutils==0.12
 feedgenerator==1.7
-gnureadline==6.3.3
 markdown2==2.3.0
 pelican==3.5.0
 python-dateutil==2.2
 python-frontmatter==0.1.4
 pytz==2014.10
-six==1.8.0
 wheel==0.23.0
 wsgiref==0.1.2

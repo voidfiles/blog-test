@@ -2,10 +2,6 @@ import logging
 import functools
 import itertools
 import os
-import six
-
-if not six.PY3:
-    from codecs import open
 
 from jinja2 import Environment, FileSystemLoader
 from pelican.utils import mkdir_p, clean_output_dir, copy
@@ -65,7 +61,7 @@ def write_post(output_post_dir, ctx, post):
     output_path = os.path.join(post_dir, 'index.html')
     output = render_post(ctx, post)
     logger.info("Writing post to path %s", output_path)
-    with open(output_path, 'w', encoding='utf-8') as fd:
+    with open(output_path, 'w') as fd:
         fd.write(output)
 
     return post
@@ -83,7 +79,7 @@ def write_index(output_post_dir, ctx, posts):
     output_path = os.path.join(output_post_dir, 'index.html')
     output = render_index(ctx, posts)
     logger.info("Writing index to path %s", output_path)
-    with open(output_path, 'w', encoding='utf-8') as fd:
+    with open(output_path, 'w') as fd:
         fd.write(output)
 
 
@@ -105,7 +101,7 @@ def write_feed(output_post_dir, ctx, posts):
     output_path = os.path.join(output_post_dir, 'index.xml')
     output = render_feed(ctx, posts)
     logger.info("Writing feed to path %s", output_path)
-    with open(output_path, 'w', encoding='utf-8') as fd:
+    with open(output_path, 'w') as fd:
         fd.write(output)
 
 
