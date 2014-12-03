@@ -1,6 +1,6 @@
 ---
 template: post
-published: false
+published: true
 title: The Wizards Are For Real
 author: Contributor
 date: "2014-06-08 10:30:00"
